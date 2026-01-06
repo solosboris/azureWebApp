@@ -1,3 +1,49 @@
+az version
+{
+  "azure-cli": "2.81.0",
+  "azure-cli-core": "2.81.0",
+  "azure-cli-telemetry": "1.1.0",
+  "extensions": {}
+}
+
+az login
+az account show
+{
+  "environmentName": "AzureCloud",
+  "homeTenantId": "cfc53f96-398b-4925-adb8-b4d0e69d91d3",
+  "id": "a4b21e7a-17cb-4148-9b56-4f512159e01a",
+  "isDefault": true,
+  "managedByTenants": [],
+  "name": "Azure subscription 1",
+  "state": "Enabled",
+  "tenantDefaultDomain": "solosborisproton.onmicrosoft.com",
+  "tenantDisplayName": "Default Directory",
+  "tenantId": "cfc53f96-398b-4925-adb8-b4d0e69d91d3",
+  "user": {
+    "name": "solosboris@proton.me",
+    "type": "user"
+  }
+}
+
+winget install Microsoft.Azd
+C:\Program Files\Microsoft\Azure Functions Core Tools\
+mkdir azureWebApp
+cd azureWebApp
+
+
+azd init --template azure-functions-java-flex-consumption-azd -e httpendpoint-java
+cd http
+mvn clean package azure-functions:run
+
+Core Tools Version:       4.6.0+ab90faafcab539d63cd3d0ce5faf1bca4395fccc (64-bit)
+Function Runtime Version: 4.1045.200.25556
+
+functions:
+
+       httpget: [GET] http://localhost:7071/api/httpget
+
+       httppost: [POST] http://localhost:7071/api/httppost
+
 <!--
 ---
 description: This repository contains an Azure Functions HTTP trigger quickstart written in Java and deployed to Azure Functions Flex Consumption using the Azure Developer CLI (AZD). This sample uses managed identity and a virtual network to insure it's secure by default.
