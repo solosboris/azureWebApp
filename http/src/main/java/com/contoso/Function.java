@@ -29,12 +29,22 @@ public class Function {
                 authLevel = AuthorizationLevel.FUNCTION)
                 HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
-        context.getLogger().info("Java HTTP trigger processed a request.");
+        context.getLogger()
+            .info("Java HTTP trigger processed a request");
 
         // Parse query parameter
-        String name = Optional.ofNullable(request.getQueryParameters().get("name")).orElse("World");
+        String name =
+            Optional
+                .ofNullable(
+                    request
+                        .getQueryParameters()
+                        .get("name")
+                ).orElse("World");
 
-        return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name).build();
+        return request
+                .createResponseBuilder(HttpStatus.OK)
+                .body("Hello, ".concat(name))
+                .build();
     }
 
     /**
@@ -49,26 +59,62 @@ public class Function {
                 authLevel = AuthorizationLevel.FUNCTION)
                 HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
-        context.getLogger().info("Java HTTP trigger processed a POST request.");
+        context
+            .getLogger()
+            .info("Java HTTP trigger processed a POST request");
 
         // Parse request body
         String name;
         Integer age;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(request.getBody().orElse("{}"));
-            name = Optional.ofNullable(jsonNode.get("name")).map(JsonNode::asText).orElse(null);
-            age = Optional.ofNullable(jsonNode.get("age")).map(JsonNode::asInt).orElse(null);
-            if (name == null || age == null) {
-                return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
-                        .body("Please provide both name and age in the request body.").build();
+            JsonNode jsonNode =
+                (new ObjectMapper())
+                    .readTree(
+                        request
+                            .getBody()
+                            .orElse("{}")
+                    );
+            name = Optional
+                    .ofNullable(
+                        jsonNode.get("name")
+                    ).map(
+                        JsonNode::asText
+                    ).orElse("");
+            age = Optional
+                    .ofNullable(
+                        jsonNode.get("age")
+                    ).map(
+                        JsonNode::asInt
+                    ).orElse(-1);
+            if (name.isEmpty() || age < 0) {
+                return request
+                        .createResponseBuilder(HttpStatus.BAD_REQUEST)
+                        .body(
+                            "Please provide both name and age in the request body"
+                        ).build();
             }
         } catch (Exception e) {
-            context.getLogger().severe("Error parsing request body: " + e.getMessage());
-            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
-                    .body("Error parsing request body").build();
+            context
+                .getLogger()
+                .severe(
+                    "Error parsing request body "
+                        .concat(e.toString())
+                );
+            return request
+                        .createResponseBuilder(HttpStatus.BAD_REQUEST)
+                        .body("Error parsing request body")
+                        .build();
         }
 
-        return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name +"! You are " + age +" years old.").build();
+        return request
+                .createResponseBuilder(HttpStatus.OK)
+                .body("Hello, "
+                    .concat(name)
+                    .concat("! You are ")
+                    .concat(
+                        Integer.toString(age)
+                    ).concat(" years old;")
+                ).build();
     }
+
 }

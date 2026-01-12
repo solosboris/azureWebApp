@@ -10,12 +10,17 @@ import java.util.HashMap;
  * returned response by HTTP trigger function is correct or not.
  */
 public class HttpResponseMessageMock implements HttpResponseMessage {
-    private int httpStatusCode;
+    
     private HttpStatusType httpStatus;
-    private Object body;
+    private int httpStatusCode;
     private Map<String, String> headers;
+    private Object body;
 
-    public HttpResponseMessageMock(HttpStatusType status, Map<String, String> headers, Object body) {
+    public HttpResponseMessageMock(
+        HttpStatusType status,
+        Map<String, String> headers,
+        Object body
+    ) {
         this.httpStatus = status;
         this.httpStatusCode = status.value();
         this.headers = headers;
@@ -45,8 +50,8 @@ public class HttpResponseMessageMock implements HttpResponseMessage {
     public static class HttpResponseMessageBuilderMock implements HttpResponseMessage.Builder {
         private Object body;
         private int httpStatusCode;
-        private Map<String, String> headers = new HashMap<>();
         private HttpStatusType httpStatus;
+        private Map<String, String> headers = new HashMap<>();
 
         public Builder status(HttpStatus status) {
             this.httpStatusCode = status.value();
@@ -62,7 +67,10 @@ public class HttpResponseMessageMock implements HttpResponseMessage {
         }
 
         @Override
-        public HttpResponseMessage.Builder header(String key, String value) {
+        public HttpResponseMessage.Builder header(
+            String key,
+            String value
+        ) {
             this.headers.put(key, value);
             return this;
         }
@@ -75,7 +83,12 @@ public class HttpResponseMessageMock implements HttpResponseMessage {
 
         @Override
         public HttpResponseMessage build() {
-            return new HttpResponseMessageMock(this.httpStatus, this.headers, this.body);
+            return new HttpResponseMessageMock(
+                this.httpStatus,
+                this.headers,
+                this.body
+            );
         }
     }
+
 }
